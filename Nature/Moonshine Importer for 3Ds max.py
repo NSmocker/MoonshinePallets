@@ -4,11 +4,11 @@ from io import BytesIO
 import os
 
 models_in_pallet = 7
-pallet_url ='https://github.com/NSmocker/MoonshinePallets/raw/main/Nature/'
-folder_for_files ='D:/git_pallets/'
-
+pallet_url ='https://github.com/NSmocker/MoonshinePallets/raw/main/Nature/' #url where to download fbx files
+folder_for_files ='D:/git_pallets/'#folder to localy save fbx pallet
+files_to_import ="D:/SavesFromMoonshine/" #txt files extracted from vr glasses
+count_of_txt_files = 10
 '''
-
 print("start downloading pallet")
 for i in range(1,models_in_pallet):
     url = pallet_url + str(i)+".zip"
@@ -33,22 +33,12 @@ def FBX_import(path, skin, animation):
 
 def open_my_file(number):
    
-    f = open("D:/SavesFromMoonshine/"+str(number)+".txt", "r")
-    print("opening..."+"D:/SavesFromMoonshine/"+str(number)+".txt" )
-    
-    if(len(os.listdir(folder_for_files+str(number)+'/'))>1):
-        filename_to_import =folder_for_files+str(number)+'/'+ os.listdir(folder_for_files+str(number)+'/')[1]
-    else:
-        filename_to_import =folder_for_files+str(number)+'/'+ os.listdir(folder_for_files+str(number)+'/')[0]
-    
-    print("file to import is: " + filename_to_import)
-    
-    
-    
-    FBX_import(filename_to_import, True, False)
-    
+    f = open(files_to_import+str(number)+".txt", "r")
+    print("opening..."+files_to_import+str(number)+".txt" )
+    #відкрився текстовий файл
+   
     object_info = f.readlines()
-    origin = object_info[0].split('=')[1].replace(",",".").replace("\n","")
+    number_of_model = object_info[0].split('=')[1].replace(",",".").replace("\n","").split('/')[-1].split('.')[0]
     pos_x =  object_info[1].split('=')[1].replace(",",".").replace("\n","")
     pos_y =  object_info[2].split('=')[1].replace(",",".").replace("\n","")
     pos_z =  object_info[3].split('=')[1].replace(",",".").replace("\n","")
@@ -58,25 +48,43 @@ def open_my_file(number):
     sacle_x =  object_info[7].split('=')[1].replace(",",".").replace("\n","")
     scale_y =  object_info[8].split('=')[1].replace(",",".").replace("\n","")
     scale_z =  object_info[9].split('=')[1].replace(",",".").replace("\n","")
+    #взнали інфу про файл
+    print("folder with model to open:"+number_of_model)
+
+
+# з нього берем циферку, в яку папку із палітри заходити, і який фбх імпортірувати
     
+    
+    if(len(os.listdir(folder_for_files+str(number_of_model)+'/'))>1):
+        filename_to_import =folder_for_files+str(number_of_model)+'/'+ os.listdir(folder_for_files+str(number_of_model)+'/')[1]
+    else:
+        filename_to_import =folder_for_files+str(number_of_model)+'/'+ os.listdir(folder_for_files+str(number_of_model)+'/')[0]
+    
+    print("file to import is: " + filename_to_import)
+    
+    
+    
+   
+    
+    
+    
+    
+    FBX_import(filename_to_import, True, False)
     selected_object = mxs.Selection[0]
     
     selected_object.pos = mxs.Point3(float(pos_x),float(pos_y),float(pos_z)) 
+ #   selected_object.rotation = mxs.EulerAngles(float(angle_x),float(angle_y),float(angle_z)) 
+    selected_object.rotation = mxs.Point3(float(angle_x),float(angle_y),float(angle_z))
+ 
+    selected_object.scale = mxs.Point3(float(sacle_x),float(scale_y),float(scale_z))
+    selected_object.name = filename_to_import+str(number)
+    
+    
+    
     print("done")
     
     
 
 
+open_my_file(5)
 
-open_my_file(1)
-
-
-'''
-
-path = "D:/IchiRiged.fbx"
-
-
-
-
-
-'''
