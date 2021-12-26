@@ -3,22 +3,24 @@ from pymxs import runtime as mxs
 from io import BytesIO
 import os
 
-models_in_pallet = 7
+models_in_pallet = 8
 pallet_url ='https://github.com/NSmocker/MoonshinePallets/raw/main/Nature/' #url where to download fbx files
 folder_for_files ='D:/git_pallets/'#folder to localy save fbx pallet
-files_to_import ="D:/SavesFromMoonshine/" #txt files extracted from vr glasses
-count_of_txt_files = 10
-'''
-print("start downloading pallet")
-for i in range(1,models_in_pallet):
-    url = pallet_url + str(i)+".zip"
-    filename = url.split('/')[-1]
-    req = requests.get(url)
-    unzipper= zipfile.ZipFile(BytesIO(req.content))
-    unzipper.extractall(folder_for_files+str(i)+'/')
-  
-print("Pallet Downloaded on folder"+ folder_for_files)
-'''
+files_to_import ="C:/Users/Silver Echo/Desktop/moonshine_save/" #txt files extracted from vr glasses
+count_of_txt_files = 45
+
+#Todo fix transforms
+def dwonload_pallet():
+    print("start downloading pallet")
+    for i in range(1,models_in_pallet):
+        url = pallet_url + str(i)+".zip"
+        filename = url.split('/')[-1]
+        req = requests.get(url)
+        unzipper= zipfile.ZipFile(BytesIO(req.content))
+        unzipper.extractall(folder_for_files+str(i)+'/')
+      
+    print("Pallet Downloaded on folder"+ folder_for_files)
+
 
 
 def FBX_import(path, skin, animation):
@@ -72,11 +74,11 @@ def open_my_file(number):
     FBX_import(filename_to_import, True, False)
     selected_object = mxs.Selection[0]
     
-    selected_object.pos = mxs.Point3(float(pos_x),float(pos_y),float(pos_z)) 
- #   selected_object.rotation = mxs.EulerAngles(float(angle_x),float(angle_y),float(angle_z)) 
-    selected_object.rotation = mxs.Point3(float(angle_x),float(angle_y),float(angle_z))
+    selected_object.asd = mxs.Point3(float(pos_x)*10,float(pos_z)*10,float(pos_y)*10) 
+    selected_object.rotation = mxs.EulerAngles(float(angle_x),float(angle_z),float(angle_y)) 
+    
  
-    selected_object.scale = mxs.Point3(float(sacle_x),float(scale_y),float(scale_z))
+    selected_object.scale = mxs.Point3(float(sacle_x)+10,float(scale_z)+10,float(scale_y)+10)
     selected_object.name = filename_to_import+str(number)
     
     
@@ -85,6 +87,7 @@ def open_my_file(number):
     
     
 
-
-open_my_file(5)
+#dwonload_pallet()
+for i in range(0,5):
+    open_my_file(i)
 
